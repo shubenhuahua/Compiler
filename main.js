@@ -1,4 +1,5 @@
 const fs = require("fs");
+const token = require("./token.js");
 
 fs.readFile("./test.js", "utf8", function(err, data) {
     if (err) {
@@ -6,20 +7,9 @@ fs.readFile("./test.js", "utf8", function(err, data) {
         return;
     }
     data = data.trim();
-    for (var i = 0; i < data.length; i++) {
-        switch (data[i]) {
-            case " ":
-                console.log("-");
-                break;
-            case "\n":
-                console.log("\\n");
-                break;
-            case "\"":
-                console.log("\"");
-                break;
-            default:
-                console.log(data[i]);
-                break;
-        }
+    for (var i = 0; i < data.length;) {
+        let tok = token.next_token(data, i);
+        i = tok.i;
+        console.log(tok.content, " => ", tok.type);
     }
 });
