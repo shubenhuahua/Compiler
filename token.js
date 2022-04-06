@@ -147,6 +147,61 @@ function parse_strings(data, i) {
             is_matched = true;
             break;
         }
+
+        if (data[i] === "\\") {
+            i += 1;
+            if (data.length < i) {
+                return {
+                    i: i,
+                    content: false,
+                    type: BAD,
+                }
+            }
+            switch (data[i]) {
+                case "\"":
+                    content += "\"";
+                    i++;
+                    break;
+                case "\'":
+                    content += "\'";
+                    i++;
+                    break;
+                case "\\":
+                    content += "\\";
+                    i++;
+                    break;
+                case "\/":
+                    content += "\/";
+                    i++;
+                    break;
+                case "b":
+                    content += "\b";
+                    i++;
+                    break;
+                case "f":
+                    content += "\f";
+                    i++;
+                    break;
+                case "n":
+                    content += "\n";
+                    i++;
+                    break;
+                case "r":
+                    content += "\\r";
+                    i++;
+                    break;
+                case "t":
+                    content += "\t";
+                    i++;
+                    break;
+                default:
+                    return {
+                        i: i,
+                        content: false,
+                        type: BAD,
+                    }
+            }
+        }
         content += data[i];
     }
     if (!is_matched) {
@@ -222,6 +277,14 @@ function next_token(data, i) {
 
 module.exports = {
     next_token,
+    WHITESPACE,
+    RESERVED_ID,
+    USER_ID,
+    NUMBER,
+    STRINGS,
+    SYMBOL,
+    EOF,
+    BAD,
 }
 
 function assert(lhs, rhs) {
@@ -230,3 +293,6 @@ function assert(lhs, rhs) {
         abort();
     }
 }
+
+"'\\'"
+"'\\j'"

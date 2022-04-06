@@ -11,5 +11,8 @@ fs.readFile("./test.js", "utf8", function(err, data) {
         let tok = token.next_token(data, i);
         i = tok.i;
         console.log(tok.content, " => ", tok.type);
+        if (tok.type === token.BAD) {
+            break;
+        }
     }
 });

@@ -6,3 +6,4 @@
 public
     'basdfasdf'
 w_lE23
+    "qwer\nrtyuu"
