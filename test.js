@@ -1,9 +1,1 @@
-0
-0.
-123
-1
-123.123
-public
-    'basdfasdf'
-w_lE23
-    "qwer\nrtyuu"
+3 < 4 ? 2 : 3

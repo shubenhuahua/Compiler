@@ -127,7 +127,7 @@ function parse_white_space(data, i) {
     }
     return {
         i: i,
-        content: '-',
+        content: '<WHITESPACE>',
         type: WHITESPACE,
     }
 }
@@ -221,7 +221,7 @@ function parse_number(data, i) {
     if (data[i] >= "1" && data[i] <= "9") {
         i += 1;
         for (; i < data.length; i++) {
-            if (data[i] >= "1" && data[i] <= "9") {
+            if (data[i] >= "0" && data[i] <= "9") {
                 content += data[i];
                 continue;
             } else {
@@ -250,8 +250,19 @@ function parse_number(data, i) {
     }
 }
 
+
+
 function next_token(data, i) {
-    switch (data[i]) {
+    if (data.length <= i) {
+        return {
+            i: i,
+            content: "<EOF>",
+            type: EOF,
+        };
+    }
+
+    const ch = data[i];
+    switch (ch) {
         case ' ':
         case '\t':
         case '\n':
@@ -260,8 +271,34 @@ function next_token(data, i) {
         case '\"':
         case '\'':
             return parse_strings(data, i);
-            // case "n":
-            //     return parse_names(data, i);
+
+        case "=":
+        case ":":
+        case "+":
+        case "-":
+        case "*":
+        case "/":
+        case "{":
+        case "}":
+        case "[":
+        case "]":
+        case ";":
+        case ",":
+        case "%":
+        case "!":
+        case "&":
+        case "|":
+        case "?":
+        case ">":
+        case "<":
+        case ".":
+
+            return {
+                i: i + 1,
+                content: ch,
+                type: SYMBOL,
+            }
+
         default:
             if (letter.test(data[i])) {
                 return parse_names(data, i);
@@ -269,9 +306,11 @@ function next_token(data, i) {
             if (data[i] >= "0" && data[i] <= "9") {
                 return parse_number(data, i);
             }
-
-
-
+            return {
+                i: i + 1,
+                content: ch,
+                type: BAD,
+            }
     }
 }
 
@@ -293,6 +332,3 @@ function assert(lhs, rhs) {
         abort();
     }
 }
-
-"'\\'"
-"'\\j'"
